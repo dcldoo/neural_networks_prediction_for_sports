@@ -2,6 +2,7 @@ import pandas
 from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 from tensorflow import keras
+from flask import Flask
 
 data = pandas.read_csv('football_data.csv')
 
@@ -36,19 +37,26 @@ for i in range(206):
 percentage = number / 206 * 100
 print("Neural Network Accuracy: ", percentage, "%")
 
-opponent_list = data["Opponent"]
-opponent = input("Choose opponent: ")
+football_list = data["Opponent"]
 
-is_empty = True
-for i in range(206):
-    if opponent_list[i] == opponent:
-        is_empty = False
-        if results[i] == 1:
-            print("Poland Wins!")
-        elif results[i] == -1:
-            print("Poland Lose!")
-        else:
-            print("Draw!")
 
-if is_empty == True:
-    print("There is no such opponent in the database!")
+
+app = Flask(__name__)
+
+@app.route('/discipline/<string:discipline>/opponent/<string:opponent>')
+def check(discipline, opponent):
+    if discipline == 'footbal':
+        for i in range(206):
+            if football_list[i] == opponent:
+                if results[i] == 1:
+                    return {"discipline": discipline, "opponent": opponent, "result": "Poland Wins!"}
+                elif results[i] == -1:
+                    return {"discipline": discipline, "opponent": opponent, "result": "Poland Lose!"}
+                else:
+                    return {"discipline": discipline, "opponent": opponent, "result": "Draw!"}
+
+        return {"discipline": discipline, "opponent": opponent, "result": "There is no such opponent in the database!"}
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
