@@ -4,7 +4,6 @@ from tensorflow import keras
 from flask import Flask
 
 
-
 def get_predictions(data):
     x = data.drop(['Opponent', 'Result'], axis=1)
     y = data['Result']
