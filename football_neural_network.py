@@ -1,64 +1,33 @@
 import pandas
-from sklearn.preprocessing import StandardScaler
-from tensorflow import keras
 from flask import Flask
+from models import *
+from tools import *
 
 
-def get_predictions(data):
-    x = data.drop(['Opponent', 'Result'], axis=1)
-    y = data['Result']
-    scaler = StandardScaler()
-    x = scaler.fit_transform(x)
+sports_data_dir = ['football_data.csv']
+models = [FootballModel()]
+sports = ['football']
 
-    model = keras.Sequential([
-        keras.layers.Dense(16, activation='relu', input_shape=(x.shape[1],)),
-        keras.layers.Dense(1)
-    ])
+results = {}
+list_oponetnt = {}
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
-    model.fit(x, y, epochs=100, batch_size=1, validation_data=(x, y))
-
-    return model.predict(x)
-
-
-def get_results(predictions):
-    res = []
-
-    for i in predictions:
-        if i > -1.5 and i < -0.5:
-            res.append(-1)
-        elif i > 0.5 and i < 1.5:
-            res.append(1)
-        else:
-            res.append(0)
-
-    return res
-
-
-def get_accuracy(results, data):
-    number = 0
-    for i in range(len(results)):
-        if results[i] == data['Result'][i]:
-            number += 1
-    return number / (len(results)) * 100
-
-
-football_data = pandas.read_csv('football_data.csv')
-football_predictions = get_predictions(football_data)
-football_results = get_results(football_predictions)
-print("Neural Network Accuracy: ", get_accuracy(football_results, football_data), "%")
-football_list = football_data["Opponent"]
+for data_dir, model, sport in zip(sports_data_dir, models, sports) :
+    data = pandas.read_csv(data_dir)
+    predictions = get_predictions(model, data)
+    results[sport] = get_results(predictions)
+    print("Neural Network Accuracy: ", get_accuracy(results[sport], data), "%")
+    list_oponetnt[sport] = data["Opponent"]
 app = Flask(__name__)
 
 
 @app.route('/discipline/<string:discipline>/opponent/<string:opponent>')
 def check(discipline, opponent):
-    if discipline == 'football':
-        for i in range(len(football_list)):
-            if football_list[i] == opponent:
-                if football_results[i] == 1:
+    if discipline in list_oponetnt:
+        for i in range(len(list_oponetnt[discipline])):
+            if list_oponetnt[discipline][i] == opponent:
+                if results[discipline][i] == 1:
                     return {"discipline": discipline, "opponent": opponent, "result": "Poland Wins!"}
-                elif football_results[i] == -1:
+                elif results[discipline][i] == -1:
                     return {"discipline": discipline, "opponent": opponent, "result": "Poland Lose!"}
                 else:
                     return {"discipline": discipline, "opponent": opponent, "result": "Draw!"}
