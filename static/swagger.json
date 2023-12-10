@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Neural network prediction for sports 0.0.0",
+    "version": "0.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "predict",
+      "description": "Predicts result of company game with specific country"
+    }
+  ],
+  "paths": {
+    "/discipline/{discipline_name}/opponent/{opponent_country_name}": {
+      "get": {
+        "tags": [
+          "pretict"
+        ],
+        "summary": "Get prediction if Poland will win with chosen country in specific game.",
+        "description": "Getting result of trained neural network and give prediction if Poland will win.",
+        "parameters": [
+          {
+            "name": "discipline_name",
+            "in": "path",
+            "description": "discipline name like football, volaiball, basketball",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "opponent_country_name",
+            "in": "path",
+            "description": "country name to give the prediction",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Prediction"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Prediction": {
+        "type": "object",
+        "properties": {
+          "discipline": {
+            "type": "string",
+            "example": "football"
+          },
+          "opponent": {
+            "type": "string",
+            "example": "Austria"
+          },
+          "result": {
+            "type": "string",
+            "example": "Poland Wins!"
+          }
+        }
+      }
+    }
+  }
+}
