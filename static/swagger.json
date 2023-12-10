@@ -19,7 +19,7 @@
     "/discipline/{discipline_name}/opponent/{opponent_country_name}": {
       "get": {
         "tags": [
-          "pretict"
+          "predict"
         ],
         "summary": "Get prediction if Poland will win with chosen country in specific game.",
         "description": "Getting result of trained neural network and give prediction if Poland will win.",
