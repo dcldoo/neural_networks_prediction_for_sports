@@ -1,0 +1,4 @@
+/models/*
+!/models
+/venv
+/__pycache__/
