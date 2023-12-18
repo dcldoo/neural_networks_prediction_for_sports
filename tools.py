@@ -1,14 +1,20 @@
-
+import os.path as path
+import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
-def get_predictions(model, data):
+
+def get_predictions(model, data, sport):
     x = data.drop(['Opponent', 'Result'], axis=1)
     y = data['Result']
     scaler = StandardScaler()
     x = scaler.fit_transform(x)
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
-    model.fit(x, y, epochs=100, batch_size=1, validation_data=(x, y))
+    if path.isdir('./models/' + sport):
+        model = tf.keras.models.load_model('./models/' + sport)
+    else:
+        model.compile(optimizer='adam', loss='mean_squared_error')
+        model.fit(x, y, epochs=100, batch_size=1, validation_data=(x, y))
+        model.save('./models/' + sport, save_format='tf')
 
     return model.predict(x)
 

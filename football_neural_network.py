@@ -14,19 +14,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     config={  # Swagger UI config overrides
         'app_name': "Neural network prediction for sports"
     },
-    # oauth_config={  # OAuth config. See https://github.com/swagger-api/swagger-ui#oauth2-configuration .
-    #    'clientId': "your-client-id",
-    #    'clientSecret': "your-client-secret-if-required",
-    #    'realm': "your-realms",
-    #    'appName': "your-app-name",
-    #    'scopeSeparator': " ",
-    #    'additionalQueryStringParams': {'test': "hello"}
-    # }
 )
-
-
-
-
 
 sports_data_dir = ['football_data.csv']
 models = [FootballModel()]
@@ -35,9 +23,9 @@ sports = ['football']
 results = {}
 list_oponetnt = {}
 
-for data_dir, model, sport in zip(sports_data_dir, models, sports) :
+for data_dir, model, sport in zip(sports_data_dir, models, sports):
     data = pandas.read_csv(data_dir)
-    predictions = get_predictions(model, data)
+    predictions = get_predictions(model, data, sport)
     results[sport] = get_results(predictions)
     print("Neural Network Accuracy: ", get_accuracy(results[sport], data), "%")
     list_oponetnt[sport] = data["Opponent"]
