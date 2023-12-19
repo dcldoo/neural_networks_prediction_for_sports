@@ -16,28 +16,28 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     },
 )
 
-sports_data_dir = ['football_data.csv']
-models = [FootballModel()]
-sports = ['football']
+sports_data_dir = ['./data/football_data.csv', './data/volleyball_data.csv']
+models = [FootballModel(), VolleyballModel()]
+sports = ['football', 'volleyball']
 
 results = {}
-list_oponetnt = {}
+list_opponent = {}
 
 for data_dir, model, sport in zip(sports_data_dir, models, sports):
     data = pandas.read_csv(data_dir)
     predictions = get_predictions(model, data, sport)
     results[sport] = get_results(predictions)
     print("Neural Network Accuracy: ", get_accuracy(results[sport], data), "%")
-    list_oponetnt[sport] = data["Opponent"]
+    list_opponent[sport] = data["Opponent"]
 app = Flask(__name__)
 app.register_blueprint(swaggerui_blueprint)
 
 
 @app.route('/discipline/<string:discipline>/opponent/<string:opponent>')
 def check(discipline, opponent):
-    if discipline in list_oponetnt:
-        for i in range(len(list_oponetnt[discipline])):
-            if list_oponetnt[discipline][i] == opponent:
+    if discipline in list_opponent:
+        for i in range(len(list_opponent[discipline])):
+            if list_opponent[discipline][i] == opponent:
                 if results[discipline][i] == 1:
                     return {"discipline": discipline, "opponent": opponent, "result": "Poland Wins!"}
                 elif results[discipline][i] == -1:
