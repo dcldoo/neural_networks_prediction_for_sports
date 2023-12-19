@@ -48,7 +48,7 @@ for i in range(93):
         elif results[i] == -1:
             print("Poland Lose!")
         else:
-            print("Draw!")
+            break;
 
 if is_empty == True:
     print("There is no such opponent in the database!")
