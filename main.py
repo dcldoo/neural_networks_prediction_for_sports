@@ -16,9 +16,9 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     },
 )
 
-sports_data_dir = ['./data/football_data.csv', './data/volleyball_data.csv']
-models = [FootballModel(), VolleyballModel()]
-sports = ['football', 'volleyball']
+sports_data_dir = ['./data/football_data.csv', './data/volleyball_data.csv', './data/basketball_data.csv', './data/handball_data.csv']
+models = [FootballModel(), VolleyballModel(), BasketballModel(), HandballModel()]
+sports = ['football', 'volleyball', 'basketball', 'handball']
 
 results = {}
 list_opponent = {}
@@ -26,7 +26,7 @@ list_opponent = {}
 for data_dir, model, sport in zip(sports_data_dir, models, sports):
     data = pandas.read_csv(data_dir)
     predictions = get_predictions(model, data, sport)
-    results[sport] = get_results(predictions)
+    results[sport] = get_results(predictions, model)
     print("Neural Network Accuracy: ", get_accuracy(results[sport], data), "%")
     list_opponent[sport] = data["Opponent"]
 app = Flask(__name__)
