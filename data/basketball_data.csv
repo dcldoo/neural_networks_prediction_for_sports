@@ -1,4 +1,4 @@
-﻿Opponent,Rank,Points,Win,Draw,Loose,win_rate,draw-rate,loose_rate,result
+﻿Opponent,Rank,Points,Win,Draw,Loose,win_rate,draw-rate,loose_rate,Result
 USA,1,786.6,2,0,0,1,0,0,-1
 Spain,2,778.2,10,0,1,0.909090909,0,0.090909091,-1
 Germany,3,759.7,9,0,3,0.75,0,0.25,-1

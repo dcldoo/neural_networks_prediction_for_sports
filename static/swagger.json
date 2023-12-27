@@ -27,7 +27,7 @@
           {
             "name": "discipline_name",
             "in": "path",
-            "description": "discipline name like football, volaiball, basketball",
+            "description": "discipline name like football, volleyball, basketball, handball",
             "required": true,
             "schema": {
               "type": "string"

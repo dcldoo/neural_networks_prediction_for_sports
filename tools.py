@@ -19,13 +19,13 @@ def get_predictions(model, data, sport):
     return model.predict(x)
 
 
-def get_results(predictions):
+def get_results(predictions, model):
     res = []
 
     for i in predictions:
-        if i > -1.5 and i < -0.5:
+        if i > -1.5 and i <= model.up_lose_boundery:
             res.append(-1)
-        elif i > 0.5 and i < 1.5:
+        elif i >= model.down_win_boundery and i < 1.5:
             res.append(1)
         else:
             res.append(0)
